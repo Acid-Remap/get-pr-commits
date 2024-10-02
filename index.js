@@ -25,6 +25,13 @@ async function main() {
 
     let fullCommits = []
 
+    // Always filter out diffs on GitHub workflow files
+    commits = commits.filter(commit => {
+      return commit.files.some(file => {
+        return file.filename.startsWith('.github/workflows/')
+      })
+    });
+
     for (let i = 0; i < commits.length; i++) {
       const commit = commits[i]
       const commitDetails = await octokit.rest.repos.getCommit({

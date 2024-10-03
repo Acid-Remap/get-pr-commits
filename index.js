@@ -43,10 +43,11 @@ async function main() {
         continue
       }
 
-      fullCommits[i] = commitData
+      fullCommits.push(commitData);
     }
 
-    core.setOutput('commits', JSON.stringify(fullCommits))
+    core.setOutput('commits_string', JSON.stringify(fullCommits))
+    core.setOutput('commits', fullCommits)
   } catch (error) {
     core.setFailed(error.message)
   }

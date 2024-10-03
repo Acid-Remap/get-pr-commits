@@ -24,6 +24,7 @@ async function main() {
     let commits = commitsListed.data
 
     let fullCommits = []
+    let commitsWordsOnly = []
 
     for (let i = 0; i < commits.length; i++) {
       const commit = commits[i]
@@ -44,10 +45,15 @@ async function main() {
       }
 
       fullCommits.push(commitData);
+
+      // For bash-safe grep, we will remove any special characters and newlines
+      let commitWordsOnly = commitData.replace(/\\n/gi, "");
+      commitWordsOnly = commitData.replace(/[^a-zA-Z0-9_,: -]/g, ' ');
+      commitsWordsOnly.push(commitWordsOnly);
     }
 
-    core.setOutput('commits_string', JSON.stringify(fullCommits))
-    core.setOutput('commits', fullCommits)
+    core.setOutput('commit_words', JSON.stringify(commitsWordsOnly))
+    core.setOutput('commits', JSON.stringify(fullCommits))
   } catch (error) {
     core.setFailed(error.message)
   }
